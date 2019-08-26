@@ -1,0 +1,25 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+flask = "*"
+autopep8 = "*"
+waitress = "*"
+setuptools = "*"
+wheel = "*"
+tqdm = "*"
+twine = "*"
+pytest = "*"
+pytest-sugar = "*"
+click = "*"
+pyfiglet = "*"
+termcolor = "*"
+colorama = "*"
+pytest-cov = "*"
+
+[requires]
+python_version = "3.7"
