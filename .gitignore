@@ -1,0 +1,6 @@
+Pipfile.lock
+*.db
+build/*
+dist/*
+*.egg-info
+.coverage

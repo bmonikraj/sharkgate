@@ -24,14 +24,6 @@ class DiscoverSharkradar:
 		@params: service_name: Unique service name of the micro-service
 		@return: A tuple containing ip and port of the active micro-service instance
 		"""
-		SRD_host_tuple = Config.getSrdIpAndPort()
-		SRD_ip = SRD_host_tuple[0]
-		SRD_port = SRD_host_tuple[1]
-
-		if SRD_ip and SRD_port:
-			ip_port_tuple_of_service_name = requests.get('http://' + SRD_ip + ':' + SRD_port +'/discovery/start/' + service_name)
-
-			return ip_port_tuple_of_service_name
-		return ("", "")
+		pass
 
 

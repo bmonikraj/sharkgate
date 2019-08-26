@@ -25,6 +25,7 @@ class MQLogger:
 		@return: True | False if  publishing to MQ was successful or not
 		"""
 		#write code here
+		pass
 		
 
 

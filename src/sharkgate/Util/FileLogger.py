@@ -24,11 +24,7 @@ class FileLogger:
 
 		@return: True | False if file writing was successful or not
 		"""
-		logger_file_url = Config.getHttpLoggerFileUrl()
-		with open(logger_file_url, 'a') as f:
-			f.write(logger_object)
-			f.write('\n')
-		f.close()
+		pass
 
 
 
