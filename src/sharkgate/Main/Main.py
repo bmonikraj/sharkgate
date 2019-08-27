@@ -9,12 +9,15 @@ import os
 from waitress import serve
 import click
 import colorama
+import logging
+logging.basicConfig(level=logging.INFO)
 colorama.init(strip=not sys.stdout.isatty())
 
 basedir = opd(opd(opd(opr(__file__))))
 sys.path.append(basedir)
 
 from sharkgate.Config.Config import Config
+from sharkgate.Service.PolicySetter import PolicySetter
 
 @click.command()
 @click.option(
@@ -28,7 +31,7 @@ from sharkgate.Config.Config import Config
     help="Port number on which sharkgate will be served",
     show_default=True)
 @click.option(
-    '--logging',
+    '--httplog',
     default='y',
     type=click.Choice(['y','n']),
     help="Whether to enable HTTP logging in sharkgate")
@@ -54,11 +57,11 @@ from sharkgate.Config.Config import Config
     help="Full qualified host address for sharkradar host",
     show_default=True)
 @click.option(
-    '--configdir',
+    '--policydir',
     default='/',
     help="Fully qualified path of directory containing all yml config files for sharkgate",
     show_default=True)
-def main(addr, port, logging, logger, logfile, discovery, sharkradarhost, configdir):
+def main(addr, port, httplog, logger, logfile, discovery, sharkradarhost, policydir):
     """
             Sharkgate - Command Line Interface (CLI) utility
             ===================================================
@@ -69,13 +72,15 @@ def main(addr, port, logging, logger, logfile, discovery, sharkradarhost, config
     """
     cprint(figlet_format('SHARKGATE', font='slant'), 'red', attrs=['bold'])
     try:
-        Config.setLogging(logging)
+        Config.setHTTPLog(httplog)
         Config.setLogger(logger)
         Config.setLogfile(logfile)
         Config.setDiscovery(discovery)
         Config.setSharkradarhost(sharkradarhost)
-        Config.setConfigdir(configdir)
+        Config.setPolicydir(policydir)
+        PolicySetter.policySetter()
         from sharkgate.Controller.Controller import app
+        logging.info("Sharkgate Server starting ...")
         serve(app, listen=addr + ":" + str(port))
     except Exception as e:
         click.echo(

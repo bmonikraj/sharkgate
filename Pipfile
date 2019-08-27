@@ -20,6 +20,8 @@ pyfiglet = "*"
 termcolor = "*"
 colorama = "*"
 pytest-cov = "*"
+requests = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.7"

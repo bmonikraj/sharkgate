@@ -4,6 +4,8 @@ config for the project
 import sys
 from os.path import dirname as opd, realpath as opr
 import os
+import logging
+logging.basicConfig(level=logging.INFO)
 
 basedir = opd(opd(opd(opr(__file__))))
 sys.path.append(basedir)
@@ -11,23 +13,25 @@ sys.path.append(basedir)
 class Config:
 	""" Config class for the whole project """
 
-	LOGGING = 'y'
+	HTTPLOG = 'y'
 	LOGGER = 'file'
 	LOGFILE = '/'
 	DISCOVERY = 'static'
 	SHARKRADARHOST = 'http://127.0.0.1:16461'
-	CONFIGDIR = '/'
+	POLICYDIR = '/'
+	POLICIES = []
 
 	@staticmethod
-	def getLogging():
-		return Config.LOGGING
+	def getHTTPLog():
+		return Config.HTTPLOG
 
 	@staticmethod
-	def setLogging(logging):
+	def setHTTPLog(httplog):
+		logging.info("HTTPLog param set to '{0}'".format(httplog))
 		if logging=='y':
-			Config.LOGGING = True
+			Config.HTTPLOG = True
 		else:
-			Config.LOGGING = False
+			Config.HTTPLOG = False
 
 	@staticmethod
 	def getLogger():
@@ -35,6 +39,7 @@ class Config:
 
 	@staticmethod
 	def setLogger(logger):
+		logging.info("Logger param set to '{0}'".format(logger))
 		Config.LOGGER = logger
 
 	@staticmethod
@@ -43,6 +48,7 @@ class Config:
 
 	@staticmethod
 	def setLogfile(logfile):
+		logging.info("Logfile set to '{0}'".format(logfile))
 		Config.LOGFILE = logfile
 
 	@staticmethod
@@ -50,8 +56,9 @@ class Config:
 		return Config.DISCOVERY
 
 	@staticmethod
-	def setDiscovery(disovery):
-		Config.DISCOVERY = disovery
+	def setDiscovery(discovery):
+		logging.info("Discovery param set to '{0}'".format(discovery))
+		Config.DISCOVERY = discovery
 
 	@staticmethod
 	def getSharkradarhost():
@@ -59,12 +66,22 @@ class Config:
 
 	@staticmethod
 	def setSharkradarhost(sharkradarhost):
+		logging.info("Sharkradarhost param set to '{0}'".format(sharkradarhost))
 		Config.SHARKRADARHOST = sharkradarhost
 
 	@staticmethod
-	def getConfigdir():
-		return Config.CONFIGDIR
+	def getPolicydir():
+		return Config.POLICYDIR
 
 	@staticmethod
-	def setConfigdir(configdir):
-		Config.CONFIGDIR = configdir
+	def setPolicydir(policydir):
+		logging.info("Policy dir param set to '{0}'".format(policydir))
+		Config.POLICYDIR = policydir
+
+	@staticmethod
+	def getPolicies():
+		return Config.POLICIES
+
+	@staticmethod
+	def setPolicies(policies):
+		Config.POLICIES = policies

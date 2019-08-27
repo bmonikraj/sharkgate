@@ -1,0 +1,8 @@
+# ---
+# name: first policy
+# source-url-pattern: /api/iop
+# target-host-address: http://127.0.0.1:1782
+# ---
+# name: second policy
+# source-url-pattern: /api/iop
+# target-host-address: http://127.0.0.1:1782

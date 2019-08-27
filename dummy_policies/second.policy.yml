@@ -1,0 +1,7 @@
+---
+name: third policy
+source-url-pattern: /api/iop
+target-host-address: http://127.0.0.1:1782
+target-sharkradar-name: ms1
+authentication-enable: true
+authentication-key: ppjowjoijiq

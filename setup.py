@@ -9,7 +9,8 @@ INSTALL_REQUIRE = [
     'click>=7.0',
     'pyfiglet>=0.8.0',
     'termcolor>=1.1.0',
-    'colorama>=0.4.1'
+    'colorama>=0.4.1',
+    'requests>=2.22.0'
 ]
 
 CLASSIFIERS = [

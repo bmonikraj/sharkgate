@@ -11,12 +11,12 @@ from sharkgate.Service.RouteRequestProxy import RouteRequestProxy
 
 app = Flask(__name__)
 
-@app.route('/<path:path>', methods = ['GET', 'POST', 'PUT', 'DELETE'])
+@app.route('/<path:path>', methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD','PATCH'])
 def proxy(path):
 	HttpLogger.storeLogObject(request)
 	response = RouteRequestProxy.RouteRequestProxy(request)
 	HttpLogger.storeLogObject(response)
-	return path
+	return response
 
 if __name__ == '__main__':
     app.run(use_reloader=True, port=5000, threaded=True)

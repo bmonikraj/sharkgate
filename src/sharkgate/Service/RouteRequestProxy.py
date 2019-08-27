@@ -7,11 +7,15 @@ import sys
 from os.path import dirname as opd, realpath as opr
 import os
 import requests
+from flask import Response
+import logging
+logging.basicConfig(level=logging.INFO)
 
 basedir = opd(opd(opd(opr(__file__))))
 sys.path.append(basedir)
 
 from sharkgate.Config.Config import Config
+from sharkgate.Service.EndpointResolver import EndpointResolver
 
 class RouteRequestProxy:
 	"""Class for initiaitng request to api_endpoint and returning fetched response"""
@@ -19,14 +23,16 @@ class RouteRequestProxy:
 	@staticmethod
 	def RouteRequestProxy(flaskRequestObject):
 		"""
-			Function for initiaitng request to api_endpoint and returning fetched response
-			@params: api_endpoint: api endpoint to which request will be routed
-			@params: request_method: method of the request, e.g GET, POST etc
-			@params: request_body : JOSN formatted request paramaters
-			@params: request_type : Type of the request, e.g GET, POST etc
-
-
-			@return: Response object fetched from api_endpoint
+			Notes on Basic HTTP Rules: 
+			Supported Auth -> Custom with headers (Not HTTP based Auth) 
+			Supported Methods -> GET, POST, PUT, DELETE, HEAD, OPTIONS, PATCH
+			Timeout -> Disabled
+			Redirection -> False
+			Proxy -> Disabled
+			TLS Verify -> Disabled
+			Stream -> Disabled
+			Cert -> Disabled
+			Files -> (name, (filename, fileobj, content_type))
 		"""
 		"""
 			POST, PUT, DELETE -> Complete URL can be remapped to new endpoint
@@ -35,21 +41,33 @@ class RouteRequestProxy:
 			<src path?q1=x...> -> <new path> ===: (1)
 			<src path/q1...> -> <new path/q1> ===: (2)
 		"""
-		print(flaskRequestObject.path) # src endpoint
-		print(flaskRequestObject.args) # GET params
-		print(flaskRequestObject.form) # POST, PUT, DELETE params
-		print(flaskRequestObject.headers) # headers 
-		print(flaskRequestObject.files) # file objects for POST, PUT
+		# print(flaskRequestObject.path) # src endpoint
+		# print(flaskRequestObject.args) # GET params
+		# print(flaskRequestObject.form) # POST, PUT, DELETE params
+		# print(flaskRequestObject.headers) # headers 
+		# print(flaskRequestObject.files) # file objects for POST, PUT
 
 		# based on src endpoint - mapping (1) or (2) and get some target endpoint
-
-		if flaskRequestObject.method == 'POST':
-			pass
-		if flaskRequestObject.method == 'PUT':
-			pass
-		if flaskRequestObject.method == 'DELETE':
-			pass
-		if flaskRequestObject.method == 'GET':
-			pass
-
-
+		targetURL = EndpointResolver.endpointResolver(flaskRequestObject.path)
+		files = {}
+		for f in flaskRequestObject.files:
+			files[f] = (flaskRequestObject.files[f].filename, flaskRequestObject.files[f].read(), flaskRequestObject.files[f].content_type)
+		logging.info("Setting Request Object")
+		response = requests.request(
+		 	method = flaskRequestObject.method,
+		 	url = targetURL,
+		 	params = flaskRequestObject.args.to_dict(),
+		 	data = flaskRequestObject.form.to_dict(),
+		 	headers = dict(flaskRequestObject.headers),
+		 	cookies = dict(flaskRequestObject.cookies),
+		 	files = files,
+		 	allow_redirects = False)
+		logging.info("Setting Response Object")
+		flaskResponseObject = Response(
+								response = response.content,
+								headers = response.headers,
+								)
+		flaskResponseObject.status_code = response.status_code
+		for cookie in response.cookies:
+			flaskResponseObject.set_cookie(cookie.name, cookie.value)
+		return flaskResponseObject
