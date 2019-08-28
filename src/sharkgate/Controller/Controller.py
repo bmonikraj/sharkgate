@@ -13,9 +13,8 @@ app = Flask(__name__)
 
 @app.route('/<path:path>', methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD','PATCH'])
 def proxy(path):
-	HttpLogger.storeLogObject(request)
 	response = RouteRequestProxy.RouteRequestProxy(request)
-	HttpLogger.storeLogObject(response)
+	HttpLogger.logger(request, response)
 	return response
 
 if __name__ == '__main__':

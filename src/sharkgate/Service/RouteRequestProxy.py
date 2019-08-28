@@ -48,11 +48,11 @@ class RouteRequestProxy:
 		# print(flaskRequestObject.files) # file objects for POST, PUT
 
 		# based on src endpoint - mapping (1) or (2) and get some target endpoint
-		targetURL = EndpointResolver.endpointResolver(flaskRequestObject.path)
 		files = {}
 		for f in flaskRequestObject.files:
 			files[f] = (flaskRequestObject.files[f].filename, flaskRequestObject.files[f].read(), flaskRequestObject.files[f].content_type)
 		logging.info("Setting Request Object")
+		targetURL = EndpointResolver.endpointResolver(flaskRequestObject.path)
 		response = requests.request(
 		 	method = flaskRequestObject.method,
 		 	url = targetURL,
@@ -63,9 +63,26 @@ class RouteRequestProxy:
 		 	files = files,
 		 	allow_redirects = False)
 		logging.info("Setting Response Object")
+		responseHeaders = dict(response.headers)
+		if 'Connection' in responseHeaders:
+			responseHeaders.pop('Connection')
+		if 'Keep-Alive' in responseHeaders:
+			responseHeaders.pop('Keep-Alive')
+		if 'Proxy-Authenticate' in responseHeaders:
+			responseHeaders.pop('Proxy-Authenticate')
+		if 'Proxy-Authorization' in responseHeaders:
+			responseHeaders.pop('Proxy-Authorization')
+		if 'TE' in responseHeaders:
+			responseHeaders.pop('TE')
+		if 'Trailers' in responseHeaders:
+			responseHeaders.pop('Trailers')
+		if 'Transfer-Encoding' in responseHeaders:
+			responseHeaders.pop('Transfer-Encoding')
+		if 'Upgrade' in responseHeaders:
+			responseHeaders.pop('Upgrade')
 		flaskResponseObject = Response(
 								response = response.content,
-								headers = response.headers,
+								headers = responseHeaders,
 								)
 		flaskResponseObject.status_code = response.status_code
 		for cookie in response.cookies:

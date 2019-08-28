@@ -13,13 +13,15 @@ sys.path.append(basedir)
 class Config:
 	""" Config class for the whole project """
 
-	HTTPLOG = 'y'
+	HTTPLOG = True
 	LOGGER = 'file'
-	LOGFILE = '/'
+	LOGFILE = '/sharkgate.log'
 	DISCOVERY = 'static'
 	SHARKRADARHOST = 'http://127.0.0.1:16461'
 	POLICYDIR = '/'
 	POLICIES = []
+	MQHOST = 'localhost'
+	MQPORT = 5672
 
 	@staticmethod
 	def getHTTPLog():
@@ -28,7 +30,7 @@ class Config:
 	@staticmethod
 	def setHTTPLog(httplog):
 		logging.info("HTTPLog param set to '{0}'".format(httplog))
-		if logging=='y':
+		if httplog=='y':
 			Config.HTTPLOG = True
 		else:
 			Config.HTTPLOG = False
@@ -84,4 +86,23 @@ class Config:
 
 	@staticmethod
 	def setPolicies(policies):
+		logging.info("Policies set from policies dir")
 		Config.POLICIES = policies
+
+	@staticmethod
+	def getMQHost():
+		return Config.MQHOST
+
+	@staticmethod
+	def setMQHost(mqhost):
+		logging.info("Rabbit MQ host param set to '{0}'".format(mqhost))
+		Config.MQHOST = mqhost
+
+	@staticmethod
+	def getMQPort():
+		return Config.MQPORT
+
+	@staticmethod
+	def setMQPort(mqport):
+		logging.info("Rabbit MQ port param set to '{0}'".format(mqport))
+		Config.MQPORT = mqport

@@ -34,16 +34,28 @@ from sharkgate.Service.PolicySetter import PolicySetter
     '--httplog',
     default='y',
     type=click.Choice(['y','n']),
-    help="Whether to enable HTTP logging in sharkgate")
+    help="Whether to enable HTTP logging in sharkgate",
+    show_default=True)
 @click.option(
     '--logger',
     default='file',
     type=click.Choice(['file','MQ']),
-    help="Type of HTTP logging in sharkgate")
+    help="Type of HTTP logging in sharkgate",
+    show_default=True)
 @click.option(
     '--logfile',
-    default="/",
+    default="/sharkgate.log",
     help="Fully qualified file path of http log file, if logging enabled with file ",
+    show_default=True)
+@click.option(
+    '--mqhost',
+    default="localhost",
+    help="Hostname or IP addr of Rabbit MQ server",
+    show_default=True)
+@click.option(
+    '--mqport',
+    default=5672,
+    help="Port number of Rabbit MQ server",
     show_default=True)
 @click.option(
     '--discovery',
@@ -61,7 +73,7 @@ from sharkgate.Service.PolicySetter import PolicySetter
     default='/',
     help="Fully qualified path of directory containing all yml config files for sharkgate",
     show_default=True)
-def main(addr, port, httplog, logger, logfile, discovery, sharkradarhost, policydir):
+def main(addr, port, httplog, logger, logfile, mqhost, mqport, discovery, sharkradarhost, policydir):
     """
             Sharkgate - Command Line Interface (CLI) utility
             ===================================================
@@ -78,6 +90,8 @@ def main(addr, port, httplog, logger, logfile, discovery, sharkradarhost, policy
         Config.setDiscovery(discovery)
         Config.setSharkradarhost(sharkradarhost)
         Config.setPolicydir(policydir)
+        Config.setMQHost(mqhost)
+        Config.setMQPort(int(mqport))
         PolicySetter.policySetter()
         from sharkgate.Controller.Controller import app
         logging.info("Sharkgate Server starting ...")

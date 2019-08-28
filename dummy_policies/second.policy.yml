@@ -1,7 +1,16 @@
 ---
-name: third policy
-source-url-pattern: /api/iop
-target-host-address: http://127.0.0.1:1782
+name: first policy
+source-url-pattern: ^/api/users
+target-host-address: https://reqres.in
 target-sharkradar-name: ms1
+target-sharkradar-protocol: http
+authentication-enable: true
+authentication-key: ppjowjoijiq
+---
+name: second policy
+source-url-pattern: ^/abc
+target-host-address: http://localhost:21001
+target-sharkradar-name: ms1
+target-sharkradar-protocol: http
 authentication-enable: true
 authentication-key: ppjowjoijiq

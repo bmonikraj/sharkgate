@@ -11,7 +11,8 @@ INSTALL_REQUIRE = [
     'termcolor>=1.1.0',
     'colorama>=0.4.1',
     'requests>=2.22.0',
-    'pyyaml>=5.1.2'
+    'pyyaml>=5.1.2',
+    'pika>=1.1.0'
 ]
 
 CLASSIFIERS = [

@@ -22,6 +22,7 @@ colorama = "*"
 pytest-cov = "*"
 requests = "*"
 pyyaml = "*"
+pika = "*"
 
 [requires]
 python_version = "3.7"

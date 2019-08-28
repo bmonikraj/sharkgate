@@ -24,7 +24,7 @@ class ValidatePoliciesYaml:
 		"""
 		status = True
 		message = ""
-		allowed_keys = ['name', 'source-url-pattern', 'target-host-address', 'target-sharkradar-name', 'authentication-enable', 'authentication-key']
+		allowed_keys = ['name', 'source-url-pattern', 'target-host-address', 'target-sharkradar-name', 'target-sharkradar-protocol', 'authentication-enable', 'authentication-key']
 		allowed_keys.sort()
 		for obj in ymlList:
 			present_keys = list(obj.keys())
